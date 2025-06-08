@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Factory\ProjectFactory;
+use App\Models\FailedRow;
 use App\Models\Project;
 use App\Models\Type;
 use Illuminate\Support\Collection;
@@ -73,6 +74,41 @@ class ProjectImport implements ToCollection, WithHeadingRow, WithValidation, Ski
 
     public function onFailure(Failure ...$failures)
     {
-        dd(11111111);
+        $map = [];
+        foreach ($failures as $failure) {
+            foreach ($failure->errors() as $error) {
+                $map[] = [
+                    'key' => $this->attributesMap()[$failure->attribute()],
+                    'row' => $failure->row(),
+                    'message' => $error,
+                    'task_id' => 1,
+                ];
+            }
+        }
+
+        if (count($map) > 0) FailedRow::insertFailedRows($map);
+    }
+
+    private function attributesMap(): array
+    {
+        return [
+            'tip' => 'Тип',
+            'naimenovanie' => 'Наименование',
+            'data_sozdaniia' => 'Дата создания',
+            'podpisanie_dogovora' => 'Подписание договора',
+            'dedlain' => 'Дедлайн',
+            'setevik' => 'Сетевик',
+            'nalicie_autsorsinga' => 'Наличие аутсорсинга',
+            'nalicie_investorov' => 'Наличие инвесторов',
+            'sdaca_v_srok' => 'Сдача в срок',
+            'vlozenie_v_pervyi_etap' => 'Вложение в первый этап',
+            'vlozenie_vo_vtoroi_etap' => 'Вложение во второй этап',
+            'vlozenie_v_tretii_etap' => 'Вложение в третий этап',
+            'vlozenie_v_cetvertyi_etap' => 'Вложение в четвёртый этап',
+            'kolicestvo_uslug' => 'Количество услуг',
+            'kolicestvo_ucastnikov' => 'Количество участников',
+            'kommentarii' => 'Комментарий',
+            'znacenie_effektivnosti' => 'Значение эффективности',
+        ];
     }
 }
