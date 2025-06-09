@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="w-96 mx-auto">
+    <div class="w-2/3 mx-auto">
         <navigation></navigation>
         <slot/>
     </div>
