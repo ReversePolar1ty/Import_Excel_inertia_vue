@@ -49,12 +49,16 @@
                 </div>
             </figure>
         </div>
+        <div>
+            <Pagination :meta="tasks.meta"></Pagination>
+        </div>
     </div>
 </template>
 
 <script>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
+import Pagination from "@/Components/Pagination.vue";
 
 export default {
     name: "Index",
@@ -62,7 +66,8 @@ export default {
     layout: MainLayout,
 
     components: {
-        Link
+        Link,
+        Pagination
     },
 
     props: [
