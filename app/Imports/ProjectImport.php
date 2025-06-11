@@ -63,7 +63,7 @@ class ProjectImport implements ToCollection, WithHeadingRow, WithValidation, Ski
         return [
             'tip' => 'required|string',
             'naimenovanie' => 'required|string',
-            'data_sozdaniia' => 'required|integer',
+            'data_sozdaniia' => 'required|string',
             'podpisanie_dogovora' => 'required|integer',
             'dedlain' => 'nullable|integer',
             'setevik' => 'nullable|string',
@@ -82,21 +82,9 @@ class ProjectImport implements ToCollection, WithHeadingRow, WithValidation, Ski
         ];
     }
 
-    public function onFailure(Failure ...$failures)
+    public function onFailure(Failure ...$failures): void
     {
-        $map = [];
-        foreach ($failures as $failure) {
-            foreach ($failure->errors() as $error) {
-                $map[] = [
-                    'key' => $this->attributesMap()[$failure->attribute()],
-                    'row' => $failure->row(),
-                    'message' => $error,
-                    'task_id' => $this->task->id,
-                ];
-            }
-        }
-
-        if (count($map) > 0) FailedRow::insertFailedRows($map, $this->task);
+        processFailures($failures, $this->attributesMap(), $this->task);
     }
 
     private function attributesMap(): array

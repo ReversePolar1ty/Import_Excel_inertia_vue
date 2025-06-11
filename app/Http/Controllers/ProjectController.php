@@ -36,6 +36,6 @@ class ProjectController extends Controller
         ]);
 
         ImportProjectExcelFileJob::dispatchSync($file->path, $task);
-//        return inertia('Project/Index', []);
+        return inertia('Project/Index');
     }
 }

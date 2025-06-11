@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Imports\ProjectDynamicImport;
 use App\Imports\ProjectImport;
+use App\Models\Task;
 use Illuminate\Console\Command;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\Console\Command\Command as CommandAlias;
@@ -28,7 +30,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        Excel::import(new ProjectImport(), 'files/first.xlsx', 'public');
+        Excel::import(new ProjectDynamicImport(Task::find(2)), 'files/second.xlsx', 'public');
         return CommandAlias::SUCCESS;
     }
 }
